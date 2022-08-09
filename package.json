@@ -1,0 +1,25 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "Recipe application",
+  "default": "index.html",
+  "scripts": {
+    "start": "parcel 18-forkify/starter/index.html",
+    "build": "parcel build 18-forkify/starter/index.html --dist-dir ./dist"
+  },
+  "author": "Cosku YAVASSSS",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.2.1",
+    "assert": "^2.0.0",
+    "console-browserify": "^1.2.0",
+    "parcel": "^2.2.1",
+    "process": "^0.11.10",
+    "util": "^0.12.4"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "fracty": "^1.0.9",
+    "regenerator-runtime": "^0.13.7"
+  }
+}
