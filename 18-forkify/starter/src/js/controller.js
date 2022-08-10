@@ -7,19 +7,7 @@ import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
 import addRecipeView from './views/addRecipeView.js';
 
-// if (module.hot) {
-//   module.hot.accept();
-// }
 
-//polyfill
-// import 'core-js/stable';
-// import 'regenerator-runtime/runtime';
-
-// const recipeContainer = document.querySelector('.recipe');
-
-// https://forkify-api.herokuapp.com/v2
-
-///////////////////////////////////////
 
 //aşağıda asenkron js'i fetch ile kullandık. unutma fetch her zaman bir promise return eder. await ise fetch'in gelecek olan promise'ini bekler. ama sorun yok async olduğu için onu beklemesi genel akışı etkilemiyor.
 
@@ -160,9 +148,6 @@ const controlAddRecipe = async function (newRecipe) {
   }
 };
 
-const newFeature = function () {
-  console.log('Welcome to the application');
-};
 
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
@@ -172,6 +157,5 @@ const init = function () {
   searchView.addHandlerSearch(controlSearchResults); //bunu init içinde yapıyoruz da bu fonksiyon sayfa yüklenir yüklenmez hemen var olsun. search fonksiyonunun çalışmadığı bir zaman dilimi istemiyoruz.
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
-  newFeature();
 };
 init();
