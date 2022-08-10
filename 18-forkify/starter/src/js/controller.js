@@ -6,6 +6,7 @@ import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js';
 import addRecipeView from './views/addRecipeView.js';
+import mealPlanView from './views/mealPlanView.js';
 
 
 
@@ -27,6 +28,8 @@ const controlRecipes = async function () {
 
     // 1 - UPDATING  BOOKMARKS VIEW
     bookmarksView.update(model.state.bookmarks);
+
+    mealPlanView.update(model.state.weekPlans);
 
     //2) LOADING THE RECIPE
     await model.loadRecipe(id); //bu bir async fonksiyon (model.js'e bakabilirsin, async olarak tanımlanmış). o yüzden bir promise return edecek. o yüzden başına await ekleyelim async olarak işlem yapsın.
@@ -133,6 +136,7 @@ const controlAddRecipe = async function (newRecipe) {
 
     //RENDER BOOKMARKVIEW
     bookmarksView.render(model.state.bookmarks);
+    mealPlanView.render(model.state.weekPlans);
 
     //change ID in the URL (ÇÜNKÜ her bir tarifin ayrı bir id'sinin olması gerekiyor ama şu an öyle değil)
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
@@ -148,14 +152,34 @@ const controlAddRecipe = async function (newRecipe) {
   }
 };
 
+const controlAddWeekPlan = function () {
+  //1 - Add or remove the recipe from week plan
+  if (!model.state.recipe.week_planned) model.addWeekPlan(model.state.recipe);
+  else model.deleteWeekPlan(model.state.recipe.id);
+
+  console.log(model.state.recipe.week_planned);
+
+  // 2 - Update recipe view
+  recipeView.update(model.state.recipe);
+
+  // 3- Render Meal Plans
+
+  mealPlanView.render(model.state.weekPlans);
+};
+
+const controlWeekPlan = function () {
+  mealPlanView.render(model.state.weekPlans);
+};
 
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
+  recipeView.addHandlerAddWeekPlan(controlAddWeekPlan);
   searchView.addHandlerSearch(controlSearchResults); //bunu init içinde yapıyoruz da bu fonksiyon sayfa yüklenir yüklenmez hemen var olsun. search fonksiyonunun çalışmadığı bir zaman dilimi istemiyoruz.
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
+  mealPlanView.addHandlerRender(controlWeekPlan);
 };
 init();
