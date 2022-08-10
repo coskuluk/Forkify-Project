@@ -40,6 +40,14 @@ class RecipeView extends View {
     });
   }
 
+  addHandlerAddWeekPlan(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--weekly-plan');
+      if (!btn) return;
+      handler();
+    });
+  }
+
   _generateMarkup() {
     return `
       <figure class="recipe__fig">
@@ -97,6 +105,13 @@ class RecipeView extends View {
     }"></use>
           </svg>
         </button>
+        <button class="btn--round btn--weekly-plan">
+        <svg class="">
+          <use href="${icons}#icon${
+      this._data.week_planned ? '-check' : '-plus-circle'
+    }"></use>
+        </svg>
+      </button>
       </div>
       <div class="recipe__ingredients">
         <h2 class="heading--2">Recipe ingredients</h2>
