@@ -14,6 +14,7 @@ export const state = {
     resultsPerPage: RES_PER_PAGE,
   },
   bookmarks: [],
+  weekPlans: [],
 };
 
 //aşağıdaki fonksiyonumuz aslında bir şey return etmiyor. sadece fetch edilen recipe data'sını alıp onu daha sonra kullanabileceğimiz okunabilir bir obje haline getiriyor.
@@ -45,7 +46,10 @@ export const loadRecipe = async function (id) {
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true;
     else state.recipe.bookmarked = false;
-    console.log(state.recipe);
+
+    if (state.weekPlans.some(weekPlanned => weekPlanned.id === id))
+      state.recipe.week_planned = true;
+    else state.recipe.week_planned = false;
   } catch (err) {
     //temporary error handling. daha sonra bunu geliştireceğiz.
 
@@ -107,6 +111,33 @@ export const updateServings = function (newServings) {
 
 //bookmark array'i için yaptığımız her bir değişikliği local storage'ye kaydedecek olan bir fonksiyon yarattık. bu fonksiyonu bookmark için yaptığımız her işlem sonrasında çağıracağız. böylelikle silmeyi de eklemeyi de biliyor olacak.
 
+
+const persistWeekPlan = function () {
+  localStorage.setItem('weekPlans', JSON.stringify(state.weekPlans));
+};
+
+
+export const addWeekPlan = function (recipe) {
+  //Add Meal Plan
+  state.weekPlans.push(recipe);
+  console.log(state.weekPlans);
+  //Mark Current Recipe as Added To The Meal Plan
+  if (recipe.id === state.recipe.id) state.recipe.week_planned = true;
+
+  persistWeekPlan();
+};
+
+export const deleteWeekPlan = function (id) {
+  const index = state.weekPlans.findIndex(el => el.id === id);
+  state.weekPlans.splice(index, 1);
+
+  //marking as false
+  if (id === state.recipe.id) state.recipe.week_planned = false;
+  persistWeekPlan();
+};
+
+
+
 const persistBookmarks = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
@@ -138,8 +169,11 @@ export const deleteBookmark = function (id) {
 //sayfa yüklendiğinde local storage'de bir şey varsa otomatik olarak yüklenmesini istiyoruz. o halde bunun için bir initilization fonksiyonu yaratmalıyız. böyle durumlarda init ismini verirsen genel kullanıma uygun olur.
 
 const init = function () {
-  const storage = localStorage.getItem('bookmarks');
-  if (storage) state.bookmarks = JSON.parse(storage);
+  const storageBookmarks = localStorage.getItem('bookmarks');
+  if (storageBookmarks) state.bookmarks = JSON.parse(storageBookmarks);
+
+  const storageWeekPlans = localStorage.getItem('weekPlans');
+  if (storageWeekPlans) state.weekPlans = JSON.parse(storageWeekPlans);
 };
 
 init();
